@@ -2,10 +2,10 @@ import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
 import { FlexPlugin } from 'flex-plugin';
 
-import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
 import TaskTimeout from './components/TaskTimeout/TaskTimeout';
 
 import reducers, { namespace } from './states';
+import TaskTimeoutNotification from './components/TaskTimeoutNotification/TaskTimeoutNotification';
 
 const PLUGIN_NAME = 'InactivityTimeoutPlugin';
 
@@ -24,7 +24,13 @@ export default class InactivityTimeoutPlugin extends FlexPlugin {
   async init(flex, manager) {
     this.registerReducers(manager);
 
-    flex.TaskListItem.Content.add(<TaskTimeout key="timeout-component" />)
+    flex.Notifications.registerNotification({
+      id: "taskTimeoutNotification",
+      content: <TaskTimeoutNotification />,
+      type: flex.NotificationType.info
+    });
+
+    flex.TaskListItem.Content.add(<TaskTimeout key="timeout-component" />);
   }
 
   /**
